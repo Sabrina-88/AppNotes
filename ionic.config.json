@@ -1,6 +1,8 @@
 {
   "name": "BlocoDeNotas",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "2132f2d6"
 }

@@ -4,24 +4,47 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      List
+      App Bloco de Notas
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-icon [name]="item.icon" slot="start"></ion-icon>
-      {{item.title}}
-      <div class="item-note" slot="end">
-        {{item.note}}
-      </div>
+	
+  <h3>Bloco de Anotações</h3>
+  <form #form="ngForm" [formGroup]="formularioDeUsuario">
+  <ion-item>
+  	<ion-label position="floating">Escreva aqui</ion-label>
+  	   <ion-textarea [(ngModel)]="txtNote.texto" ngModel name="note" formControlName="texto" type="text" (keyup.enter)="enviarDados()" ></ion-textarea>
+  	</ion-item>
+<div class="alert" *ngIf="!form.valid">Preencha o campo de anotação</div>
+ <div>
+    <ion-button color="primary" expand="full" (click)="enviarDados()" [disabled]="form.pristine">SALVAR</ion-button>
+  </div>
+</form>
+
+<ion-list>
+  <ion-item-sliding *ngFor="let arrForm of arrForms; let i = index;">
+    <ion-item>
+      <ion-label>{{ arrForm.texto }}</ion-label>
     </ion-item>
-  </ion-list>
-  <!--
-    <div *ngIf="selectedItem" padding>
-      You navigated here from <b>{{selectedItem.title }}</b>
-    </div>
-  -->
+    <ion-item-options side="start">
+      <ion-item-option color="warning" (click)="edit(i)">Editar</ion-item-option>
+      
+    </ion-item-options>
+
+    <ion-item-options side="end">
+      <ion-item-option color="danger" (click)="delete(i)">Deletar</ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-list>
+    
+<div>
+  <h4> Anotações salvas</h4>
+  <ul>  
+    <li *ngFor="let theForm of allForms">{{ theForm.texto }}</li>  
+  </ul>
+</div>
+      
+
 </ion-content>

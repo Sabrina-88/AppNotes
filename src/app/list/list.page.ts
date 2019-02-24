@@ -1,39 +1,51 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '../../../node_modules/@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-list',
   templateUrl: 'list.page.html',
   styleUrls: ['list.page.scss']
 })
-export class ListPage implements OnInit {
-  private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
+export class ListPage  {
+    formularioDeUsuario: FormGroup;
+  public arrForms: Array<any> = [];
+  public txtNote = '';
+  public allForms = JSON.parse(localStorage.getItem('form'));
+  public teste = '';
+ 
+  constructor(private formBuilder: FormBuilder) {}
+  ngOnInit(): void {
+    this.criarFormularioDeUsuario();
+
   }
 
-  ngOnInit() {
+  enviarDados() {
+  this.arrForms.push({texto: this.formularioDeUsuario.value.texto});
+    this.formularioDeUsuario.reset(this.criarFormularioDeUsuario());
+    localStorage.setItem('form', JSON.stringify(this.arrForms)); // string com chave e valor
+
+    let itemForm = JSON.parse(localStorage.getItem('form')); // objeto
+
+    this.allForms = itemForm;
+
+    console.log(this.allForms);
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
+
+   edit(index) {
+    this.txtNote = this.arrForms[index];
+    this.arrForms.splice(index, 1);
+    }
+
+  delete(index) {
+    this.arrForms.splice(index, 1);
+   localStorage.setItem('form', JSON.stringify(this.arrForms))  // como o array esta primeiro deletando de acordo com a posição, para "apagar" do localStorage basta setar a variavel que ja esta atualizada 
+  }
+
+
+  criarFormularioDeUsuario() {
+    this.formularioDeUsuario = this.formBuilder.group({
+    texto: ['']
+    });
+  }
 }
